@@ -1,11 +1,34 @@
-﻿
+﻿/*
+PROBLEMA 6:	Crie uma Tabela que leia valores da Entrada. Mostre os cálculos para um período de 8 meses e 10 dias e que mostre o Rendimento Futuro:								
+Valor Presente Investido:		1000, 5500, 12000   Entradas: 1000, 5500, 12000
+Taxa de Juros		3%, 2,48%, 2%	Taxas: 3 %, 2,48 % e 2 %
+Número Períodos(mes)       8 meses e 10 dias	Período: 8 meses e 10 dias						
+//Ok									
+									
+PROBLEMA 7:	Dado o enunciado do PROBLEMA 6. Mostre uma Tabela que calcula se houver um Resgate do Rendimento no 5º mês								
+									
+Valor Presente Investido:		5500
+Taxa de Juros		2,48%							
+Número Períodos (mes)		8 meses e 10 dias							
+Resgate do Rendimento		500							
+Saldo Líquido Restante		R$ 5.566,23							
+Rendimento Restante		R$ 6.189,62							
+//Ok
+
+PROBLEMA8:	Dado o enunciado do PROBLEMA 7. Elabore um programa que leia as entradas e calcule, mostre em um formato de Tabela 								
+									
+Valor Investido	Taxa de Juros	Rendimento	    Período (a.m.)	    Resgate     Saldo Líquido	
+R$ 12.000,00	2,00%	        R$ 13.608,23	8 meses e 10 dias	R$ 500,00	R$ 12.489,19
+//Ok
+*/
+
 namespace ParteIII
 {
-    //Não terminei a parteIII
     public class Program
     {
 #pragma warning disable CS8604 // Possível argumento de referência nula.
 
+        //Propriedades
         private static int TipoPeriodo { get; set; }
         private static int Periodo { get; set; }
         private static int IsResgate { get; set; }
@@ -23,23 +46,12 @@ namespace ParteIII
         static void Main(string[] args)
         {
             var isCalcular = true;
-
             while (isCalcular)
             {
                 try
                 {
                     Console.WriteLine("\nCALCULANDO JUROS COMPOSTO\n");
-                    Console.WriteLine("Quer calcular qual é o valor futuro ou inicial?");
-                    Console.Write("1 para futuro e 0 para inicial: ");
-                    var tipoCalcula = int.Parse(Console.ReadLine());
-                    if (tipoCalcula > 1 || tipoCalcula < 0)
-                        throw new Exception();
-
-                    if (tipoCalcula == 1)
-                        CalcularValorFuturo();
-                    else
-                        CalcularValorInicial();
-
+                    CalcularValorFuturo();
                     isCalcular = ContinuarCalculando();
                 }
                 catch
@@ -51,6 +63,7 @@ namespace ParteIII
         }
 
     //Metodos principais
+
         private static bool ContinuarCalculando()
         {
             Console.Write("\nDeseja calcular mais? 1 para sim e 0 não: ");
@@ -59,7 +72,6 @@ namespace ParteIII
             else
                 return false;
         }
-
         private static void CalcularValorFuturo()
         {
 
@@ -150,156 +162,6 @@ namespace ParteIII
             ResultadoResumido();
         }
 
-        //Ainda há fazer/Arrumar o CalcularValorInicial()
-        private static void CalcularValorInicial()
-        {
-            Console.Write("Digite o número do valor futuro: ");
-            double valorFuturo = double.Parse(Console.ReadLine());
-            Console.Write("Digite o número da taxa de Juros: ");
-            double taxaJuros = double.Parse(Console.ReadLine());
-
-            double valorInicial = 0.0;
-            int periodo = 0;
-            var isResgate = false;
-            var valorDeEntrada = valorFuturo;
-
-            Console.Write("Digite o número de periodo sendo 1 para mês e 0 para ano: ");
-            int tipoPeriodo = int.Parse(Console.ReadLine());
-
-            if (tipoPeriodo == 0)
-            {
-                Console.Write("Digite o número de Anos: ");
-                int ano = int.Parse(Console.ReadLine());
-                periodo = ano;
-
-                Console.Write("Tem resgate de rendimento? 1 para sim e 0 para não: ");
-                if (int.Parse(Console.ReadLine()) == 1)
-                    isResgate = true;
-
-                if (isResgate)
-                {
-                    Console.Write($"Qual ano entre 1 e {periodo} será o resgate? número: ");
-                    var resgateAno = int.Parse(Console.ReadLine());
-                    if (resgateAno < 1 || resgateAno > periodo)
-                        throw new Exception();
-
-                    Console.WriteLine("\nAnos   |    Valor com juros    |    Resgate de rendimento");
-                    for (var i = 1; i <= periodo; i++)
-                    {
-                        if (i != resgateAno)
-                        {
-                            for (var j = 1; j <= 12; j++)
-                            {
-                                valorInicial = valorFuturo / (1 + (taxaJuros / 100));
-                                valorFuturo = valorInicial;
-                            }
-                            Console.WriteLine($"{i}           {valorInicial.ToString("C")}             {0.ToString("C")}");
-
-                        }
-                        else
-                        {
-                            Console.WriteLine("\n------------------------------------------------------------------------");
-                            Console.WriteLine("Chegou o ano do resgate!!!");
-                            Console.Write($"Informe o valor sendo ele maior que 0 e menor que {valorFuturo.ToString("C")}: ");
-                            var resgateValor = double.Parse(Console.ReadLine());
-                            Console.WriteLine("------------------------------------------------------------------------\n");
-                            if (resgateValor < 1 || resgateValor > valorFuturo)
-                                throw new Exception();
-
-                            valorFuturo -= resgateValor;
-                            for (var j = 1; j <= 12; j++)
-                            {
-                                valorInicial = valorFuturo / (1 + (taxaJuros / 100));
-                                valorFuturo = valorInicial;
-                            }
-                            Console.WriteLine($"{i}           {valorInicial.ToString("C")}             {resgateValor.ToString("C")}");
-
-                        }
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("\nAnos   |    Valor com juros");
-                    for (int i = 1; i <= periodo; i++)
-                    {
-                        for (var j = 1; j <= 12; j++)
-                        {
-                            valorInicial = valorFuturo / (1 + (taxaJuros / 100));
-                            valorFuturo = valorInicial;
-                        }
-                        Console.WriteLine($"{i}           {valorInicial.ToString("C")}");
-                    }
-                }
-            }
-            else if (tipoPeriodo == 1)
-            {
-                Console.Write("Digite o número de mês: ");
-                int mes = int.Parse(Console.ReadLine());
-                periodo = mes;
-
-                Console.Write("Tem resgate de rendimento? 1 para sim e 0 para não: ");
-                if (int.Parse(Console.ReadLine()) == 1)
-                    isResgate = true;
-
-                if (isResgate)
-                {
-                    Console.Write($"Qual mês entre 1 e {periodo} será o resgate? número: ");
-                    var resgateMes = int.Parse(Console.ReadLine());
-                    if (resgateMes < 1 || resgateMes > periodo)
-                        throw new Exception();
-
-                    Console.WriteLine("\nMês    |    Valor com juros    |    Resgate de rendimento");
-                    for (var i = 1; i <= periodo; i++)
-                    {
-                        if (i != resgateMes)
-                        {
-                            valorInicial = valorFuturo / (1 + (taxaJuros / 100));
-                            Console.WriteLine($"{i}           {valorInicial.ToString("C")}             {0.ToString("C")}");
-                            valorFuturo = valorInicial;
-                        }
-                        else
-                        {
-                            Console.WriteLine("\n------------------------------------------------------------------------");
-                            Console.WriteLine("Chegou o mês do resgate!!!");
-                            Console.Write($"Informe o valor sendo ele maior que 0 e menor que {valorFuturo.ToString("C")}: ");
-                            var resgateValor = double.Parse(Console.ReadLine());
-                            Console.WriteLine("------------------------------------------------------------------------\n");
-                            if (resgateValor < 1 || resgateValor > valorFuturo)
-                                throw new Exception();
-
-                            valorFuturo -= resgateValor;
-                            valorInicial = valorFuturo / (1 + (taxaJuros / 100));
-                            Console.WriteLine($"{i}           {valorInicial.ToString("C")}             {resgateValor.ToString("C")}");
-                            valorFuturo = valorInicial;
-                        }
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("\nMês    |    Valor com juros");
-                    for (var i = 1; i <= periodo; i++)
-                    {
-                        valorInicial = valorFuturo / (1 + (taxaJuros / 100));
-                        Console.WriteLine($"{i}           {valorInicial.ToString("C")}");
-                        valorFuturo = valorInicial;
-                    }
-                }
-            }
-            else
-            {
-                Console.WriteLine("Digite apenas 1 para mês e 0 para ano");
-                throw new Exception();
-            }
-
-
-            Console.WriteLine($"\nRESULTADO APÓS JUROS\n" +
-           $"\nValor Futuro: {valorDeEntrada.ToString("C")}" +
-           $"\nTaxa de Juros : {taxaJuros}%" +
-           $"\nPeriodo : {periodo}" +
-           $"\nValor Inicial : {valorInicial.ToString("C")}\n");
-
-        }
-
 
     //Metodos de auxilio ao CalcularValorFuturo()
 
@@ -356,7 +218,6 @@ namespace ParteIII
                 }
             }
         }
-
         private static void ConfigurarTabelaAno()
         {
             //Começa a escrever a tabela sendo as colunas Anos e Valor com juros
@@ -376,7 +237,6 @@ namespace ParteIII
                 Console.WriteLine($"{i}           {ValorFuturo.ToString("C")}");
             }
         }
-
         private static void CalcularDias()
         {
             //Calcula o valor futuro de acordo com o juros e com os dias
@@ -389,7 +249,6 @@ namespace ParteIII
             //Redefine o valor atual
             ValorAtual = ValorFuturo;
         }
-
         private static void ConfigurarTabelaMesResgateRendimento()
         {
             //Obtem o período que vai haver o resgate e verifica se é valido
@@ -433,7 +292,6 @@ namespace ParteIII
                 }
             }
         }
-
         private static void ConfigurarTabelaMes()
         {
             //Começa a escrever a tabela sendo as colunas Mês, Valor com juros
@@ -448,7 +306,6 @@ namespace ParteIII
                 ValorAtual = ValorFuturo;
             }
         }
-
         private static void ResultadoResumido()
         {
             //Configura o texto de periodoFormatado
@@ -477,11 +334,6 @@ namespace ParteIII
            $"\nResgate de rendimento : {resgateFormatado}" +
            $"\nValor Futuro : {ValorFuturo.ToString("C")}\n");
         }
-
-
-    //Metodos de auxilio ao CalcularValorInicial()?
-
-        //...
 
 #pragma warning restore CS8604 // Possível argumento de referência nula.
     }
